@@ -9,6 +9,7 @@
 #import "HomeVC.h"
 
 @interface HomeVC ()
+@property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UICollectionView *collection;
 
 @end
@@ -17,7 +18,25 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    // 为iOS11 做适配
+    if (@available(iOS 11.0, *))
+    {
+        // 在iOS11中VC的 automaticallyAdjustsScrollViewInsets 属性被废弃，以下为替代方案
+        _tableView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
+    }
+    
+//    CGFloat itemWidth;
+//    CGFloat itemHeight;
+//    UICollectionViewFlowLayout *layout = [[UICollectionViewLayout alloc]init];
+//    //滚动方向->水平
+//    layout.scrollDirection = UICollectionViewScrollDirectionHorizontal;
+//    //间距
+//    layout.minimumLineSpacing = 12;
+//    layout.minimumInteritemSpacing = 12;
+//    //每个item的size
+//    layout.itemSize = CGSizeMake(itemWidth, itemHeight);
+//    _collection.layout
+//    _collection = [[UICollectionView alloc]initWithFrame:CGRectMake(0, 0, 0, 0) collectionViewLayout:layout];
 }
 
 
@@ -38,21 +57,8 @@
 #pragma mark ［配置CV单元格］
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath
 {
-    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"<##>" forIndexPath:indexPath];
+    UICollectionViewCell *cell = [collectionView dequeueReusableCellWithReuseIdentifier:@"AD1" forIndexPath:indexPath];
     return cell;
-}
-
-
-#pragma mark [CV补充视图]
-- (UICollectionReusableView *)collectionView:(UICollectionView *)collectionView viewForSupplementaryElementOfKind:(NSString *)kind atIndexPath:(NSIndexPath *)indexPath
-{
-    <#UICollectionReusableView#> *reusableView;
-    // 段头类型
-    if (kind == UICollectionElementKindSectionHeader)
-    {
-        reusableView = [collectionView dequeueReusableSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:@"<##>" forIndexPath:indexPath];
-    }
-    return reusableView;
 }
 
 #pragma mark 点击CV单元格
@@ -61,14 +67,30 @@
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
 }
 
-/*
-#pragma mark - Navigation
+#pragma mark - ......::::::: UITableViewDataSource :::::::......
 
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
+#pragma mark TV段数
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
+{
+    return 1;
 }
-*/
+#pragma mark TV行数
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
+{
+    return 5;
+}
 
+#pragma mark ［配置TV单元格］
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"AD2" forIndexPath:indexPath];
+    return cell;
+}
+
+#pragma mark TV单元格点击
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
+}
 @end
